@@ -68,7 +68,7 @@ public class Field implements Draw {
                 new Predicate<Food>() {
                     @Override
                     public boolean test(Food food) {
-                        return food.getPoint().isNear(next);
+                        return food.isNear(next);
                     }
                 }
         );
@@ -100,11 +100,11 @@ public class Field implements Draw {
      * @return 是否撞到
      */
     public boolean checkSnake(Snake snake, Point next) {
-        if (snake.getHead().isNear(next)) {
+        if (snake.getHead().isNear(next, 0.5)) {
             return true;
         }
         for (Point point : snake.getTail()) {
-            if (point.isNear(next)) {
+            if (point.isNear(next, 0.5)) {
                 return true;
             }
         }
@@ -129,7 +129,7 @@ public class Field implements Draw {
      */
     public boolean checkFood(Point next) {
         for (Food food : foods) {
-            if (food.getPoint().isNear(next)) {
+            if (food.isNear(next)) {
                 return true;
             }
         }

@@ -66,17 +66,33 @@ public final class Point implements Draw {
         return new Point(newX, newY);
     }
 
+    /**
+     * 检测与该点连线的角度
+     * @param target 检测点
+     * @return 角度
+     */
     public double getAngle(Point target) {
-        double tan = (this.y - target.y) / (this.x - target.x);
-        double rad = Math.atan(tan);
+        double dx = target.x - x;
+        double dy = target.y - y;
+        double rad = Math.atan2(dy, dx);
         return Math.toDegrees(rad);
     }
 
-    public boolean isNear(Point point) {
+    /**
+     * 检测是否与某点靠近
+     * @param point 检测点
+     * @param power 与MOVE_DISTANCE相乘的倍数，数值越大越容易返回true
+     * @return 与point的距离是否小于power * MOVE_DISTANCE
+     */
+    public boolean isNear(Point point, double power) {
         double dx = point.x - x;
         double dy = point.y - y;
         double distance = Math.sqrt(dx * dx + dy * dy) + 1e-3;
-        return distance < MOVE_DISTANCE;
+        return distance < MOVE_DISTANCE * power;
+    }
+
+    public boolean isNear(Point point) {
+        return isNear(point, 1);
     }
 
     @Override

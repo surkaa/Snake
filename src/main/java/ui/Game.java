@@ -23,11 +23,8 @@ public class Game extends JFrame {
     public static void main(String[] args) {
         Game game = new Game("Snake", new View());
         Field field = Field.getINSTANCE();
-        field.newSnake(0, new Point(30.0, 30.0));
-        field.newFood(new Point(10.0, 0.0));
-        field.newFood(new Point(13.0, 0.0));
-        field.newFood(new Point(16.0, 0.0));
-        field.newFood(new Point(19.0, 0.0));
+        field.newSnake(0, new Point(0.0, 0.0));
+        field.newFood(new Point(10.0, 10.0));
         int i = 0;
         while (i++ < 10000000) {
             game.run();

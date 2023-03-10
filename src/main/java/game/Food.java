@@ -32,6 +32,10 @@ public class Food implements Draw{
         return point;
     }
 
+    public boolean isNear(Point point) {
+        return this.point.isNear(point, 2);
+    }
+
     public void setPoint(Point point) {
         this.point = point;
     }
