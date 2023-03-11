@@ -23,24 +23,36 @@ public class Game extends JFrame {
         pack();
         setVisible(true);
         addKeyListener(new KeyAdapter() {
-            // shift键加速 ctrl键减速
+            // shift/up键加速 ctrl/down键减速
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
-                if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-                    sleepTime = 10;
-                }
-                if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-                    sleepTime = 150;
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_CONTROL:
+                    case KeyEvent.VK_DOWN:
+                        sleepTime = 150;
+                        break;
+                    case KeyEvent.VK_SHIFT:
+                    case KeyEvent.VK_UP:
+                        sleepTime = 10;
+                        break;
+                    default:
+                        break;
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-                if (e.getKeyCode() == KeyEvent.VK_SHIFT
-                        || e.getKeyCode() == KeyEvent.VK_CONTROL) {
-                    sleepTime = 50;
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_SHIFT:
+                    case KeyEvent.VK_CONTROL:
+                    case KeyEvent.VK_UP:
+                    case KeyEvent.VK_DOWN:
+                        sleepTime = 50;
+                        break;
+                    default:
+                        break;
                 }
             }
         });
