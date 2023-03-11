@@ -4,11 +4,15 @@ import game.Field;
 import game.Point;
 
 import javax.swing.JFrame;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Game extends JFrame {
 
     private final Field field = Field.getINSTANCE();
     private final View view;
+
+    private long sleepTime = 100;
 
     public Game(String title, View view) {
         super(title);
@@ -18,6 +22,24 @@ public class Game extends JFrame {
         add(Game.this.view);
         pack();
         setVisible(true);
+        addKeyListener(new KeyAdapter() {
+            // 空格键加速
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == 32) {
+                    sleepTime = 20;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if (e.getKeyCode() == 32) {
+                    sleepTime = 100;
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -35,7 +57,7 @@ public class Game extends JFrame {
         field.run();
         view.repaint();
         try {
-            Thread.sleep(100);
+            Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
