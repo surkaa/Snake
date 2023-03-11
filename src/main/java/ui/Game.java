@@ -3,7 +3,7 @@ package ui;
 import game.Field;
 import game.Point;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -40,6 +40,8 @@ public class Game extends JFrame {
                     case KeyEvent.VK_SPACE:
                         pause = !pause;
                         break;
+                    case KeyEvent.VK_ESCAPE:
+                        System.exit(0);
                     default:
                         break;
                 }
@@ -61,14 +63,6 @@ public class Game extends JFrame {
             }
         });
         addKeyListener(this.field);
-    }
-
-    public static void main(String[] args) {
-        Game game = new Game("Snake", new View());
-        Field field = Field.getINSTANCE();
-        field.newSnake(0, new Point(0.0, 0.0));
-        field.newFood();
-        game.start();
     }
 
     private void start() {
@@ -95,5 +89,13 @@ public class Game extends JFrame {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game("Snake", new View());
+        Field field = Field.getINSTANCE();
+        field.newSnake(0, new Point(0.0, 0.0));
+        field.newFood();
+        game.start();
     }
 }

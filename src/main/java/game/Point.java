@@ -58,6 +58,14 @@ public final class Point implements Draw {
     }
 
     /**
+     * @param d the distance from the edge of the map
+     * @return true if the point is out of the map
+     */
+    public boolean isBroken(double d) {
+        return x < d || x > MAX_X - d || y < d || y > MAX_Y - d;
+    }
+
+    /**
      * 通过方向获取目的地的点
      *
      * @param direction 目的地的方向
