@@ -44,6 +44,7 @@ public class Game extends JFrame {
                 }
             }
         });
+        addKeyListener(this.field);
     }
 
     public static void main(String[] args) {

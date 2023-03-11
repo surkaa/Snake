@@ -1,12 +1,14 @@
 package game;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
-public class Field implements Draw {
+public class Field implements Draw, KeyListener {
 
     private final List<Snake> snakes = new ArrayList<>();
 
@@ -198,4 +200,40 @@ public class Field implements Draw {
         return null;
     }
 
+    @Override
+    public void keyPressed(KeyEvent e) {
+        Snake snake = isOneSnake();
+        if (snake == null) return;
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_D:
+                snake.setAngle(0);
+                break;
+            case KeyEvent.VK_S:
+                snake.setAngle(90);
+                break;
+            case KeyEvent.VK_A:
+                snake.setAngle(180);
+                break;
+            case KeyEvent.VK_W:
+                snake.setAngle(270);
+                break;
+            case KeyEvent.VK_LEFT:
+                snake.setAngle(snake.getAngle() - 10);
+                break;
+            case KeyEvent.VK_RIGHT:
+                snake.setAngle(snake.getAngle() + 10);
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
 }

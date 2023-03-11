@@ -7,12 +7,4 @@
 .idea/misc.xml
 .idea/smartfox_info.xml
 .idea/vcs.xml
-target/classes/game/Draw.class
-target/classes/game/Field$1.class
-target/classes/game/Field.class
-target/classes/game/Food.class
-target/classes/game/Point.class
-target/classes/game/Snake.class
-target/classes/ui/Game.class
-target/classes/ui/View$1.class
-target/classes/ui/View.class
+*.class
