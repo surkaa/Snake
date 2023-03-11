@@ -2,6 +2,7 @@ package game;
 
 import java.awt.*;
 
+@SuppressWarnings("unused")
 public class Food implements Draw{
 
     private Point point;
@@ -25,7 +26,7 @@ public class Food implements Draw{
     }
 
     public Food() {
-        this(Point.random());
+        this(Point.random(Point.DRAW_RADIUS / (double) Point.MULTIPLE));
     }
 
     public Point getPoint() {

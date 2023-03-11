@@ -46,6 +46,10 @@ public final class Point implements Draw {
         return new Point(Math.random() * MAX_X, Math.random() * MAX_Y);
     }
 
+    public static Point random(double d) {
+        return new Point(Math.random() * (MAX_X - d * 2) + d, Math.random() * (MAX_Y - d * 2) + d);
+    }
+
     /**
      * @return true if the point is out of the map
      */
@@ -56,7 +60,7 @@ public final class Point implements Draw {
     /**
      * 通过方向获取目的地的点
      *
-     * @param direction 目的地的方向（取值范围[0, 360)）
+     * @param direction 目的地的方向
      * @return 目的地的点
      */
     public Point target(double direction) {
