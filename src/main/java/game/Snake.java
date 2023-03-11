@@ -60,7 +60,7 @@ public class Snake implements Draw {
 
     @Override
     public void onDraw(Graphics g) {
-        head.draw(g, Color.RED);
+        head.onDraw(g, Color.RED);
         for (Point point : tail) {
             point.onDraw(g);
         }

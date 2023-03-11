@@ -59,7 +59,6 @@ public class Food implements Draw{
 
     @Override
     public void onDraw(Graphics g) {
-        g.setColor(color);
-        point.onDraw(g);
+        point.onDraw(g, color, 0.5);
     }
 }

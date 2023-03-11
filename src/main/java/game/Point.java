@@ -101,12 +101,24 @@ public final class Point implements Draw {
 
     @Override
     public void onDraw(Graphics g) {
-        draw(g, Color.BLACK);
+        onDraw(g, Color.BLACK);
     }
 
-    public void draw(Graphics g, Color color) {
+    public void onDraw(Graphics g, Color color) {
         g.setColor(color);
-        g.fillOval((int) (x * MULTIPLE), (int) (y * MULTIPLE), DRAW_RADIUS, DRAW_RADIUS);
+        g.fillOval((int) (x * MULTIPLE) - DRAW_RADIUS / 2, (int) (y * MULTIPLE) - DRAW_RADIUS / 2, DRAW_RADIUS, DRAW_RADIUS);
+    }
+
+    /**
+     * 绘制一个圆
+     * @param g 画笔
+     * @param color 颜色
+     * @param power 与正常DRAW_RADIUS的倍数
+     */
+    public void onDraw(Graphics g, Color color, double power) {
+        int radius = (int) (DRAW_RADIUS * power);
+        g.setColor(color);
+        g.fillOval((int) (x * MULTIPLE) - radius / 2, (int) (y * MULTIPLE) - radius / 2, radius, radius);
     }
 
     //<editor-fold desc="getter setter toString equals hashCode">
