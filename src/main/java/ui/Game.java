@@ -11,7 +11,7 @@ public class Game extends JFrame {
 
     private final Field field = Field.getINSTANCE();
     private final View view;
-
+    private boolean pause = true;
     private long sleepTime = 50;
 
     public Game(String title, View view) {
@@ -35,6 +35,9 @@ public class Game extends JFrame {
                     case KeyEvent.VK_SHIFT:
                     case KeyEvent.VK_UP:
                         sleepTime = 10;
+                        break;
+                    case KeyEvent.VK_SPACE:
+                        pause = !pause;
                         break;
                     default:
                         break;
@@ -63,11 +66,24 @@ public class Game extends JFrame {
         Game game = new Game("Snake", new View());
         Field field = Field.getINSTANCE();
         field.newSnake(0, new Point(0.0, 0.0));
-        field.newFood(new Point(10.0, 10.0));
-        int i = 0;
-        while (i++ < 10000000) {
-            game.run();
-        }
+        field.newFood();
+        game.start();
+    }
+
+    private void start() {
+        new Thread(() -> {
+            while (true) {
+                if (pause) {
+                    run();
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        System.exit(0);
+                    }
+                }
+            }
+        }).start();
     }
 
     private void run() {
