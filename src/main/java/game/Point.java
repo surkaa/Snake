@@ -12,13 +12,13 @@ import java.util.Objects;
 public final class Point implements Draw {
 
     // 地图的最大宽度
-    public static final int MAX_X = 100;
+    public static final int MAX_X = 64;
 
     // 地图的最大高度
-    public static final int MAX_Y = 62;
+    public static final int MAX_Y = 40;
 
     // 用于绘制的倍数（绘画时Point的坐标将乘以此倍数）
-    public static final int MULTIPLE = 10;
+    public static final int MULTIPLE = 15;
 
     // 每次移动的距离
     public static final double MOVE_DISTANCE = 0.5;
@@ -26,7 +26,7 @@ public final class Point implements Draw {
     // 绘图的大小
     public static final int DRAW_SIZE_X = MAX_X * MULTIPLE;
     public static final int DRAW_SIZE_Y = MAX_Y * MULTIPLE;
-    public static final int DRAW_RADIUS = 12;
+    public static final int DRAW_RADIUS = 18;
 
     private final double x;
 
@@ -103,10 +103,6 @@ public final class Point implements Draw {
     public void draw(Graphics g, Color color) {
         g.setColor(color);
         g.fillOval((int) (x * MULTIPLE), (int) (y * MULTIPLE), DRAW_RADIUS, DRAW_RADIUS);
-        // q: fillOval的参数是什么意思？
-        // a: 前两个参数是左上角的坐标，后两个参数是宽和高
-        // q: fillOval画的是什么？
-        // a: 一个实心的椭圆
     }
 
     //<editor-fold desc="getter setter toString equals hashCode">
