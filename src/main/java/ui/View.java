@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 public class View extends JPanel {
 
@@ -21,16 +22,27 @@ public class View extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mouseClicked(e);
-                // 只有一个蛇时，点击鼠标左键，蛇向鼠标所在位置移动
-                Snake snake = field.isOneSnake();
-                if (snake != null) {
-                    Point head = snake.getHead();
-                    Point target = new Point(e.getX() / (double) Point.MULTIPLE, e.getY() / (double) Point.MULTIPLE);
-                    double newAngle = head.getAngle(target);
-                    snake.setAngle(newAngle);
-                }
+                turnByMouse(e);
             }
         });
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+                turnByMouse(e);
+            }
+        });
+    }
+
+    private void turnByMouse(MouseEvent e) {
+        // 只有一个蛇时，点击鼠标左键，蛇向鼠标所在位置移动
+        Snake snake = field.isOneSnake();
+        if (snake != null) {
+            Point head = snake.getHead();
+            Point target = new Point(e.getX() / (double) Point.MULTIPLE, e.getY() / (double) Point.MULTIPLE);
+            double newAngle = head.getAngle(target);
+            snake.setAngle(newAngle);
+        }
     }
 
     @Override
