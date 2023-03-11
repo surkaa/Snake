@@ -22,6 +22,7 @@ public class Game extends JFrame {
         add(Game.this.view);
         pack();
         setVisible(true);
+        setLocationRelativeTo(null);
         addKeyListener(new KeyAdapter() {
             // shift/up键加速 ctrl/down键减速
             @Override
