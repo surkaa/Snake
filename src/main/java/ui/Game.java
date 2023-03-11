@@ -12,7 +12,7 @@ public class Game extends JFrame {
     private final Field field = Field.getINSTANCE();
     private final View view;
 
-    private long sleepTime = 100;
+    private long sleepTime = 50;
 
     public Game(String title, View view) {
         super(title);
@@ -23,20 +23,24 @@ public class Game extends JFrame {
         pack();
         setVisible(true);
         addKeyListener(new KeyAdapter() {
-            // 空格键加速
+            // shift键加速 ctrl键减速
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
-                if (e.getKeyCode() == 32) {
-                    sleepTime = 20;
+                if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+                    sleepTime = 10;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                    sleepTime = 150;
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-                if (e.getKeyCode() == 32) {
-                    sleepTime = 100;
+                if (e.getKeyCode() == KeyEvent.VK_SHIFT
+                        || e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                    sleepTime = 50;
                 }
             }
         });
