@@ -105,7 +105,7 @@ public class Game extends JFrame implements KeyListener {
     public static void main(String[] args) {
         Game game = new Game("Snake", new View());
         game.field.newSnake(0, new Point(0.0, 0.0));
-        game.field.newFood();
+        game.field.newFood(5);
         game.start();
     }
 }

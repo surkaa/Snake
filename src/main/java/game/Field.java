@@ -1,11 +1,11 @@
 package game;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
 public class Field implements Draw, KeyListener {
@@ -67,15 +67,10 @@ public class Field implements Draw, KeyListener {
     private void replaceFood(Point next) {
         // 删除食物
         foods.removeIf(
-                new Predicate<Food>() {
-                    @Override
-                    public boolean test(Food food) {
-                        return food.isNear(next);
-                    }
-                }
+                food -> food.isNear(next)
         );
         // 生成新食物
-        newFood();
+        newFood(1);
     }
 
     /**
@@ -171,10 +166,11 @@ public class Field implements Draw, KeyListener {
         return food;
     }
 
-    public Food newFood() {
-        Food food = new Food();
-        foods.add(food);
-        return food;
+    public void newFood(int count) {
+        for (int i = 0; i < count; i++){
+            Food food = new Food();
+            foods.add(food);
+        }
     }
     //</editor-fold>
 
