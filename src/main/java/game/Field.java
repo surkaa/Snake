@@ -8,11 +8,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class Field implements Draw, KeyListener {
+public final class Field implements Draw, KeyListener {
 
     private final List<Snake> snakes = new ArrayList<>();
 
     private final List<Food> foods = new ArrayList<>();
+
+    // 运行监听器列表 用于监听每次运行前后（step函数）的事件
+    private final List<RunListener> runListeners = new ArrayList<>();
+
+    // 装入Thread的Runnable
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            // 只在isPause为false时运行
+            while (!isPause) {
+                step();
+            }
+        }
+    };
+
+    // 每次运行的间隔时间
+    private int sleepTime = 50;
+
+    // 是否暂停
+    private boolean isPause = false;
 
     //<editor-fold desc="单例构造">
     /**
@@ -20,6 +40,7 @@ public class Field implements Draw, KeyListener {
      */
     private static Field INSTANCE = null;
 
+    // 私有构造函数 用于单例模式 不能直接new
     private Field() {
 
     }
@@ -35,15 +56,66 @@ public class Field implements Draw, KeyListener {
     }
     //</editor-fold>
 
-    public void run() {
-        for (Snake snake : snakes) {
-            if (snake.isAlive()) {
-                once(snake);
-            }
-        }
+    //<editor-fold desc="RunListener">
+    /**
+     * 运行监听器
+     */
+    public interface RunListener {
+        /**
+         * 在每次运行前调用
+         */
+        void beforeRun();
+
+        /**
+         * 在每次运行后调用
+         */
+        void afterRun();
     }
 
-    private void once(Snake snake) {
+    public void addRunListener(RunListener runListener) {
+        runListeners.add(runListener);
+    }
+
+    public void removeRunListener(RunListener runListener) {
+        runListeners.remove(runListener);
+    }
+
+    public void clearRunListener() {
+        runListeners.clear();
+    }
+    //</editor-fold>
+
+    // 开始或继续游戏
+    public void start() {
+        isPause = false;
+        new Thread(runnable).start();
+    }
+
+    // 暂停游戏
+    private void pause() {
+        isPause = true;
+    }
+
+    /**
+     * 一次运行, 所有蛇都走一步
+     */
+    public void step() {
+        for (RunListener runListener : runListeners) {
+            runListener.beforeRun();
+        }
+        for (Snake snake : snakes) {
+            if (snake.isAlive()) {
+                runOneSnake(snake);
+            }
+        }
+        for (RunListener runListener : runListeners) {
+            runListener.afterRun();
+        }
+        sleep();
+    }
+
+    // 轮到此蛇走一步
+    private void runOneSnake(Snake snake) {
         Point next = snake.nextTarget();
         if (checkFood(next)) {
             snake.onEat();
@@ -64,8 +136,18 @@ public class Field implements Draw, KeyListener {
         // TODO 可以写一个Result类，用于存储结果，用于once中蛇的动作
     }
 
+    private void sleep() {
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //<editor-fold desc="检测蛇状态">
+    // 找到被吃掉的食物并新增食物
     private void replaceFood(Point next) {
-        // 删除食物
+        // 删除食物 TODO 优化删除方式
         foods.removeIf(
                 food -> food.isNear(next)
         );
@@ -133,15 +215,64 @@ public class Field implements Draw, KeyListener {
         return false;
     }
 
+    /**
+     * 是否只剩下一条蛇
+     *
+     * @return 是否只剩下一条蛇, 如果是，返回此蛇， 否则返回null
+     */
+    public Snake isOneSnake() {
+        if (snakes.size() == 1) {
+            return snakes.get(0);
+        }
+        return null;
+    }
+    //</editor-fold>
+
     //<editor-fold desc="new蛇">
+
+    /**
+     * 新建蛇
+     * @param angle 初始角度
+     * @param head 初始头部位置
+     * @return 新建的蛇
+     */
     public Snake newSnake(double angle, Point head) {
         Snake snake = new Snake(angle, head);
         snakes.add(snake);
         return snake;
     }
 
+    /**
+     * 新建蛇 (默认角度为0)
+     * @param head 初始头部位置
+     * @return 新建的蛇
+     */
     public Snake newSnake(Point head) {
         Snake snake = new Snake(head);
+        snakes.add(snake);
+        return snake;
+    }
+
+    /**
+     * 新建蛇 只在地图右上角生成
+     * @return 新建的蛇
+     */
+    public Snake newSnake() {
+        Snake snake = new Snake(
+                0.0,
+                // 蛇头
+                new Point(Point.MAX_X / 4.0, Point.MAX_Y / 4.0),
+                // 蛇尾巴
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 9, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 8, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 7, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 6, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 5, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 4, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 3, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 2, Point.MAX_Y / 4.0),
+                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 1, Point.MAX_Y / 4.0)
+        );
         snakes.add(snake);
         return snake;
     }
@@ -184,18 +315,7 @@ public class Field implements Draw, KeyListener {
         }
     }
 
-    /**
-     * 是否只剩下一条蛇
-     *
-     * @return 是否只剩下一条蛇, 如果是，返回此蛇， 否则返回null
-     */
-    public Snake isOneSnake() {
-        if (snakes.size() == 1) {
-            return snakes.get(0);
-        }
-        return null;
-    }
-
+    //<editor-fold desc="KeyListener">
     @Override
     public void keyPressed(KeyEvent e) {
         Snake snake = isOneSnake();
@@ -218,6 +338,21 @@ public class Field implements Draw, KeyListener {
                 break;
             case KeyEvent.VK_RIGHT:
                 snake.setAngle(snake.getAngle() + 10);
+                break;
+            case KeyEvent.VK_CONTROL:
+            case KeyEvent.VK_DOWN:
+                sleepTime = 150;
+                break;
+            case KeyEvent.VK_SHIFT:
+            case KeyEvent.VK_UP:
+                sleepTime = 10;
+                break;
+            case KeyEvent.VK_SPACE:
+                if (isPause) start();
+                else pause();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);
             default:
                 break;
         }
@@ -225,11 +360,20 @@ public class Field implements Draw, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_SHIFT:
+            case KeyEvent.VK_CONTROL:
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_DOWN:
+                sleepTime = 50;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
+    //</editor-fold>
 }

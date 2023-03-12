@@ -12,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-public class View extends JPanel {
+public final class View extends JPanel {
 
     private final Field field = Field.getINSTANCE();
 
