@@ -3,16 +3,27 @@ package ui;
 import game.Field;
 import game.Point;
 
-import javax.swing.*;
-import java.awt.event.KeyAdapter;
+import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Game extends JFrame {
+public class Game extends JFrame implements KeyListener {
 
     private final Field field = Field.getINSTANCE();
     private final View view;
-    private boolean pause = true;
     private long sleepTime = 50;
+    private final SnakeRunnable runnable = new SnakeRunnable();
+
+    class SnakeRunnable implements Runnable {
+        boolean pause = true;
+
+        @Override
+        public void run() {
+            while (pause) {
+                runOnce();
+            }
+        }
+    }
 
     public Game(String title, View view) {
         super(title);
@@ -23,65 +34,65 @@ public class Game extends JFrame {
         pack();
         setVisible(true);
         setLocationRelativeTo(null);
-        addKeyListener(new KeyAdapter() {
-            // shift/up键加速 ctrl/down键减速
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_CONTROL:
-                    case KeyEvent.VK_DOWN:
-                        sleepTime = 150;
-                        break;
-                    case KeyEvent.VK_SHIFT:
-                    case KeyEvent.VK_UP:
-                        sleepTime = 10;
-                        break;
-                    case KeyEvent.VK_SPACE:
-                        pause = !pause;
-                        break;
-                    case KeyEvent.VK_ESCAPE:
-                        System.exit(0);
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                super.keyReleased(e);
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_SHIFT:
-                    case KeyEvent.VK_CONTROL:
-                    case KeyEvent.VK_UP:
-                    case KeyEvent.VK_DOWN:
-                        sleepTime = 50;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        addKeyListener(this);
         addKeyListener(this.field);
     }
 
-    private void start() {
-        new Thread(() -> {
-            while (true) {
-                if (pause) {
-                    run();
-                } else {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        System.exit(0);
-                    }
-                }
-            }
-        }).start();
+    @Override
+    public void keyTyped(KeyEvent e) {
+
     }
 
-    private void run() {
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // shift/up键加速 ctrl/down键减速 空格暂停继续
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_CONTROL:
+            case KeyEvent.VK_DOWN:
+                sleepTime = 150;
+                break;
+            case KeyEvent.VK_SHIFT:
+            case KeyEvent.VK_UP:
+                sleepTime = 10;
+                break;
+            case KeyEvent.VK_SPACE:
+                resumeOrPause();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_SHIFT:
+            case KeyEvent.VK_CONTROL:
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_DOWN:
+                sleepTime = 50;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void start() {
+        runnable.pause = true;
+        new Thread(runnable).start();
+    }
+
+    private void resumeOrPause() {
+        if (runnable.pause) {
+            runnable.pause = false;
+        } else {
+            start();
+        }
+    }
+
+    private void runOnce() {
         field.run();
         view.repaint();
         try {
@@ -93,9 +104,8 @@ public class Game extends JFrame {
 
     public static void main(String[] args) {
         Game game = new Game("Snake", new View());
-        Field field = Field.getINSTANCE();
-        field.newSnake(0, new Point(0.0, 0.0));
-        field.newFood();
+        game.field.newSnake(0, new Point(0.0, 0.0));
+        game.field.newFood();
         game.start();
     }
 }
