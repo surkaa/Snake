@@ -16,7 +16,7 @@ public class Snake implements Draw {
 
     private boolean isAlive = true;
 
-    protected Snake(double angle, Point head, ArrayList<Point> tail) {
+    protected Snake(double angle, Point head, List<Point> tail) {
         this.angle = angle;
         this.head = head;
         this.tail = tail;

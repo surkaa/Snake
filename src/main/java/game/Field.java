@@ -209,7 +209,7 @@ public final class Field implements Draw, KeyListener {
     public boolean checkFood(Point next) {
         for (Food food : foods) {
             if (food.isNear(next)) {
-                return true;
+                return true; // TODO 优化 直接返回食物
             }
         }
         return false;
@@ -229,7 +229,6 @@ public final class Field implements Draw, KeyListener {
     //</editor-fold>
 
     //<editor-fold desc="new蛇">
-
     /**
      * 新建蛇
      * @param angle 初始角度
@@ -258,21 +257,14 @@ public final class Field implements Draw, KeyListener {
      * @return 新建的蛇
      */
     public Snake newSnake() {
-        Snake snake = new Snake(
-                0.0,
-                // 蛇头
-                new Point(Point.MAX_X / 4.0, Point.MAX_Y / 4.0),
-                // 蛇尾巴
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 9, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 8, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 7, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 6, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 5, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 4, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 3, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 2, Point.MAX_Y / 4.0),
-                new Point(Point.MAX_X / 4.0 - Point.MOVE_DISTANCE * 1, Point.MAX_Y / 4.0)
-        );
+        double x = Point.MAX_X / 4.0;
+        double y = Point.MAX_Y / 4.0;
+        double dx = Point.MOVE_DISTANCE;
+        List<Point> tail = new ArrayList<>();
+        for (int i = 10; i > 0; i--) {
+            tail.add(new Point(x - dx * i, y));
+        }
+        Snake snake = new Snake(0.0, new Point(x, y), tail);
         snakes.add(snake);
         return snake;
     }
