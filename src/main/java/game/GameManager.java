@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public final class Field implements Draw, KeyListener {
+public final class GameManager implements Draw, KeyListener {
 
     private final List<Snake> snakes = new ArrayList<>();
 
@@ -38,19 +38,19 @@ public final class Field implements Draw, KeyListener {
     /**
      * 单例模式
      */
-    private static Field INSTANCE = null;
+    private static GameManager INSTANCE = null;
 
     // 私有构造函数 用于单例模式 不能直接new
-    private Field() {
+    private GameManager() {
 
     }
 
     /**
      * 单例模式
      */
-    public static Field getINSTANCE() {
+    public static GameManager getINSTANCE() {
         if (INSTANCE == null) {
-            INSTANCE = new Field();
+            INSTANCE = new GameManager();
         }
         return INSTANCE;
     }

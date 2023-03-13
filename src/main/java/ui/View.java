@@ -1,6 +1,6 @@
 package ui;
 
-import game.Field;
+import game.GameManager;
 import game.Point;
 import game.Snake;
 
@@ -14,7 +14,7 @@ import java.awt.event.MouseMotionAdapter;
 
 public final class View extends JPanel {
 
-    private final Field field = Field.getINSTANCE();
+    private final GameManager manager = GameManager.getINSTANCE();
 
     public View() {
         super();
@@ -36,7 +36,7 @@ public final class View extends JPanel {
 
     private void turnByMouse(MouseEvent e) {
         // 只有一个蛇时，点击鼠标左键，蛇向鼠标所在位置移动
-        Snake snake = field.isOneSnake();
+        Snake snake = manager.isOneSnake();
         if (snake != null) {
             Point head = snake.getHead();
             Point target = new Point(e.getX() / (double) Point.MULTIPLE, e.getY() / (double) Point.MULTIPLE);
@@ -51,7 +51,7 @@ public final class View extends JPanel {
         // 画背景
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, Point.DRAW_SIZE_X, Point.DRAW_SIZE_Y);
-        field.onDraw(g);
+        manager.onDraw(g);
     }
 
     @Override
