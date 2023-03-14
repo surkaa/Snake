@@ -120,20 +120,24 @@ public final class GameManager implements Draw, KeyListener {
         if (checkFood(next)) {
             snake.onEat();
             replaceFood(next);
-        } else if (checkWall(next)) {
+            return;
+        }
+        if (checkWall(next)) {
             snake.die();
             System.out.println("die wall");
-        } else if (checkSnake(snake, next)) {
+            return;
+        }
+        if (checkSnake(snake, next)) {
             snake.die();
             System.out.println("die self");
-        } else if (checkOtherSnake(snake, next)) {
+            return;
+        }
+        if (checkOtherSnake(snake, next)) {
             snake.die();
             System.out.println("die other snake");
-        } else {
-            snake.onMove();
+            return;
         }
-        // TODO 此函数运行耗时很大，需要优化
-        // TODO 可以写一个Result类，用于存储结果，用于once中蛇的动作
+        snake.onMove();
     }
 
     private void sleep() {
