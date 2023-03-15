@@ -4,11 +4,14 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public final class GameManager implements Draw, KeyListener {
+public final class GameManager implements Draw, KeyListener, MouseListener, MouseMotionListener {
 
     private final List<Snake> snakes = new ArrayList<>();
 
@@ -370,6 +373,54 @@ public final class GameManager implements Draw, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="MouseListener">
+    private void turnByMouse(MouseEvent e) {
+        // 只有一个蛇时，点击鼠标左键，蛇向鼠标所在位置移动
+        Snake snake = isOneSnake();
+        if (snake != null) {
+            Point head = snake.getHead();
+            Point target = new Point(e.getX() / (double) Point.MULTIPLE, e.getY() / (double) Point.MULTIPLE);
+            double newAngle = head.getAngle(target);
+            snake.setAngle(newAngle);
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        turnByMouse(e);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        turnByMouse(e);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
     //</editor-fold>
 }

@@ -16,6 +16,7 @@ public class Snake implements Draw {
 
     private boolean isAlive = true;
 
+    //<editor-fold desc="构造函数">
     protected Snake(double angle, Point head, List<Point> tail) {
         this.angle = angle;
         this.head = head;
@@ -34,6 +35,7 @@ public class Snake implements Draw {
     protected Snake(Point head) {
         this(0, head);
     }
+    //</editor-fold>
 
     public void setAngle(double angle) {
         this.angle = angle;
