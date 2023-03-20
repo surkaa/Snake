@@ -189,7 +189,7 @@ public final class GameManager implements Draw, KeyListener, MouseListener, Mous
         if (snake.getHead().isNear(next, 0.5)) {
             return true;
         }
-        for (Point point : snake.getTail()) {
+        for (Point point : snake.getBody()) {
             if (point.isNear(next, 0.5)) {
                 return true;
             }
@@ -267,11 +267,11 @@ public final class GameManager implements Draw, KeyListener, MouseListener, Mous
         double x = Point.MAX_X / 4.0;
         double y = Point.MAX_Y / 4.0;
         double dx = Point.MOVE_DISTANCE;
-        List<Point> tail = new ArrayList<>();
+        List<Point> body = new ArrayList<>();
         for (int i = 10; i > 0; i--) {
-            tail.add(new Point(x - dx * i, y));
+            body.add(new Point(x - dx * i, y));
         }
-        Snake snake = new Snake(0.0, new Point(x, y), tail);
+        Snake snake = new Snake(0.0, new Point(x, y), body);
         snakes.add(snake);
         return snake;
     }

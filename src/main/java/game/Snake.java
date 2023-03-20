@@ -11,25 +11,25 @@ public class Snake implements Draw {
 
     private Point head;
 
-    // tail 0 ==> (size - 1) ==> head
-    private final List<Point> tail;
+    // body 0 ==> (size - 1) ==> head
+    private final List<Point> body;
 
     private boolean isAlive = true;
 
     //<editor-fold desc="构造函数">
-    protected Snake(double angle, Point head, List<Point> tail) {
+    protected Snake(double angle, Point head, List<Point> body) {
         this.angle = angle;
         this.head = head;
-        this.tail = tail;
+        this.body = body;
     }
 
     protected Snake(double angle, Point head) {
         this(angle, head, new ArrayList<>());
     }
 
-    protected Snake(double angle, Point head, Point... tail) {
+    protected Snake(double angle, Point head, Point... body) {
         this(angle, head, new ArrayList<>());
-        Collections.addAll(this.tail, tail);
+        Collections.addAll(this.body, body);
     }
 
     protected Snake(Point head) {
@@ -46,9 +46,9 @@ public class Snake implements Draw {
      */
     public void onMove() {
         final Point newHead = head.target(angle);
-        tail.add(head);
+        body.add(head);
         head = newHead;
-        tail.remove(0);
+        body.remove(0);
     }
 
     /**
@@ -56,14 +56,14 @@ public class Snake implements Draw {
      */
     public void onEat() {
         final Point newHead = head.target(angle);
-        tail.add(head);
+        body.add(head);
         head = newHead;
     }
 
     @Override
     public void onDraw(Graphics g) {
         head.onDraw(g, Color.RED);
-        for (Point point : tail) {
+        for (Point point : body) {
             point.onDraw(g);
         }
     }
@@ -84,8 +84,8 @@ public class Snake implements Draw {
         return angle;
     }
 
-    public List<Point> getTail() {
-        return tail;
+    public List<Point> getBody() {
+        return body;
     }
 
     public Point getHead() {
